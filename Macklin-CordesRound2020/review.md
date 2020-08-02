@@ -77,9 +77,9 @@ Perhaps also relevant to the authors, Everett (2018, pg. 128) notes:
 
 I mention here that a potential shortcoming of Everett's analysis, as I understand it, is that he used the relatively small wordlists from the ASJP database. The fact that the authors here used relatively large wordlists (250 or more words) is meant to address any issues regarding estimating the actual frequencies of phonemes in the language.
 
-Personally, I would move up the information about why the authors chose a minimum wordlist size of 250, because as I read the paper, I started wondering early on in the Data section why any wordlist data was acceptable for this analysis, given the argumentation by Dockum & Bowern (2019), which is only mentioned at the end.
+Personally, I discuss earlier why the authors chose a minimum wordlist size of 250, because as I read the paper, I started wondering early on in the Data section why any wordlist data was acceptable for this analysis, given the argumentation by Dockum & Bowern (2019), which is only mentioned at the end.
 
-Another argument you could leverage here for using "Australia as an ideal controlled experiment" is that of the size of the wordlists that you are using are not readably available (AFAIK) for a large sample of the world's languages (and also not in a consistent typologized and orthographically/phonetically normalized format). Hence, given the impact of wordlist size on phonological generalizations, one arguably should not use a data set like the ASJP (https://asjp.clld.org/) -- even though as noted above, Everett reports some interesting results.
+Another argument the authors could leverage here for using "Australia as an ideal controlled experiment" is that of the size of the wordlists that you are using are not readably available (AFAIK) for a large sample of the world's languages (and also not in a consistent typologized and orthographically/phonetically normalized format). Hence, given the impact of wordlist size on phonological generalizations, one arguably should not use a data set like the ASJP (https://asjp.clld.org/) -- even though as noted above, Everett reports some interesting results.
 
 One issue I had with the paper was the claim by the authors that:
 
@@ -117,7 +117,7 @@ The introduction talks about the promise of evaluating and identifying distribut
 > "Since Yule’s first demonstration of the link between power law distributions and preferential attachment processes, power laws have been used to characterize the distributions of a diverse array of phenomena in the natural and physical world and in human society (Clauset et al., 2009, 661). City populations (Gabaix, 1999; Levy, 2009; Malevergne et al., 2011), authorship of scientific publications, income distribution (Simon, 1955), the superstar phenomenon in the music industry (Chung and Cox, 1994) and the network topology of the Internet (Faloutsos et al., 1999) are but a few of the phenomena for which power laws have been proposed (see Newman (2005), pp. 327–329 for further examples). And in linguistics, the Zipfian distribution has been used to characterize word frequencies in text corpora (Estoup, 1916; Zipf, 1932,
 80 1949)."
 
-It might be worth mentioning the lack of historical agreement on probability distributions of typological variables and that of phoneme inventory sizes (and if not, perhaps its of interest to the authors). As I write in my PhD dissertation (Moran 2012, pg 240):
+It might be worth mentioning the lack of historical agreement on probability distributions of typological variables and that of phoneme inventory sizes (and if not, perhaps it is of interest to the authors). As I wrote in my PhD dissertation (Moran 2012, pg 240):
 
 > "However, there is no agreement on how to measure the underlying probability distribution of typological variables (Cysouw, 2010). For instance, to describe phoneme inventory size, gamma (Lehfeldt, 1975) and log-normal distributions (Justeson and Stephens, 1984) have been proposed. Maddieson (2008a) also hints at a normal distribution (Cysouw, 2010, 30)."
 
@@ -138,9 +138,9 @@ It might be worth mentioning the lack of historical agreement on probability dis
 
 - "with negative quantities or zeroes" (* Isn't the plural of zero, zeros?)
 
-"x might denotes items’ frequencies,"
+- "x might denotes items’ frequencies,"
 
-"the presence or otherwise of power" (* Strange reading of "otherwise", at least for me.)
+- "the presence or otherwise of power" (* Strange reading of "otherwise", at least for me.)
 
 - "tightly proscribed range" (*Strange use of proscribed, at least to me.)
 
@@ -154,11 +154,11 @@ Regarding the supplementary materials:
 
 - "S5 is downloadable from https://zenodo.org/record/3886212#.Xt9NFWozaO8."
 
-But clicking on the link in the PDF gives the reader a 404.
+But clicking on the link in the PDF gives the reader a 404 error.
 
 The supplementary materials that I was able to access contain two data files:
 
 - Aus_metadata_2020-05-21.tsv
 - Aus_segment_frequencies_2020-05-21.tsv
 
-Perhaps it's worth noting for the reader why the raw lexical data, phoneme segmentation code, and orthography profiles, used to generate the phoneme frequency counts are not available to the reader in the SI materials or via Zenodo. It seems that some of the lexical data are accessible from the Chirila database, which is freely available after agreeing to the terms of agreement (http://chirila.yale.edu/download). So I can imagine putting it in the wild is not an option.
+Perhaps it's worth noting for the reader why the raw lexical data, phoneme segmentation code, and orthography profiles, used to generate the phoneme frequency counts are not available to the reader in the SI materials or via Zenodo. It seems that some of the lexical data are accessible from the Chirila database, which is freely available after agreeing to the terms of agreement (http://chirila.yale.edu/download). So I assume posting the data openly on the internet is, understandably, not an option.
