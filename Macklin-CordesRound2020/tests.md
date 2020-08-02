@@ -1,5 +1,5 @@
-Correlation analysis to accompany Moran’s review of Macklin-Cordes &
-Round 2020
+Correlation analysis accompaniment for review of Macklin-Cordes & Round
+2020
 ================
 Steven Moran & Nicholas Lester
 (02 August, 2020)
@@ -8,12 +8,20 @@ Steven Moran & Nicholas Lester
     library(dplyr)
     library(testthat)
     library(knitr)
+    library(ggplot2)
+    library(MASS)
+    library(gam)
 
 Overview
 ========
 
-This report is part of my open review of submitted to [Frontiers
-Psychology](https://www.frontiersin.org/journals/psychology).
+This report is an accompaniment of a [review of Macklin-Cordes &
+Round](https://github.com/bambooforest/reviews/blob/master/Macklin-CordesRound2020/review.md),
+solicited by editors of [Frontiers
+Psychology](https://www.frontiersin.org/journals/psychology) to Steven
+Moran
+<a href="mailto:steven.moran@uzh.ch" class="email">steven.moran@uzh.ch</a>.
+Details about the submission:
 
 -   Manuscript title: Re-evaluating phoneme frequencies
 -   Manuscript ID: 570895
@@ -22,7 +30,7 @@ Psychology](https://www.frontiersin.org/journals/psychology).
 -   Article type: Original Research
 -   Submitted on: 09 Jun 2020
 
-A preprint of the paper is available on arXiv.org:
+A preprint of the paper was made avvailable by the authors on arXiv.org:
 
 -   <a href="https://arxiv.org/abs/2006.05206" class="uri">https://arxiv.org/abs/2006.05206</a>
 
@@ -30,19 +38,21 @@ and the paper’s supplementary materials are available on Zenodo:
 
 -   <a href="https://zenodo.org/record/3886212#.XyQzGxMzZGB" class="uri">https://zenodo.org/record/3886212#.XyQzGxMzZGB</a>
 
-One claim made by the authors in their paper is that:
+The aim of this report is to investigate a claim made by the authors:
 
 > “our dataset of phoneme frequencies is very likely to contain the
 > complete population of phonemes in each language”
 
-in their language sample. However, the authors do not actually test this
-claim in their paper.
+However, the authors do not actually test this claim in their paper.
 
-As part of my review, I wanted to know if this claim is true or not.
-Hence, I evaluate it below using their openly available supplementary
+As part of my review (SM), I wanted to know if this claim is true or
+not. Hence, I evaluate it below using the openly available supplementary
 data and corresponding phoneme inventories reported in the
 [PHOIBLE](https://phoible.org/) database, as generously provided in 2019
 by the second author (Erich Round).
+
+Discussions with [Nicholas Lester](http://nicholaslester.weebly.com/)
+led to some additional descriptive studies and plots, below.
 
 Data prep
 =========
@@ -99,7 +109,7 @@ Get the ER (Erich Round) source for [Australian phonemic inventories
 contributed to PHOIBLE
 2.0](https://zenodo.org/record/3464333#.XyUvnBMzY3E) in PHOIBLE.
 
-    er <- phoible %>% filter(Source=="er") %>% select(InventoryID, Source, LanguageName, Phoneme) 
+    er <- phoible %>% filter(Source == "er") %>% dplyr::select(InventoryID, Source, LanguageName, Phoneme) 
 
 Let’s have a look.
 
@@ -137,7 +147,7 @@ their wordlists, so this isn’t surprising).
 Which sources are in the SI and not in PHOIBLE (at least according to
 strict language name matching)?
 
-    anti_join(counts, er.counts, by=c('variety_name'='LanguageName'))
+    anti_join(counts, er.counts, by = c('variety_name' = 'LanguageName'))
 
     ## # A tibble: 3 x 3
     ## # Groups:   lex_ID [3]
@@ -152,7 +162,7 @@ Only three out of 165. Nice!
 Let’s get the delta between the ER phoneme inventories in PHOIBLE and
 what is reported in the SI.
 
-    m <- inner_join(er.counts, counts, by=c('LanguageName'='variety_name'))
+    m <- inner_join(er.counts, counts, by = c('LanguageName' = 'variety_name'))
     m$delta <- abs(m$phoible_phonemes - m$si_phonemes)
 
 For the most languages, the difference is quite small, but there are two
@@ -335,12 +345,49 @@ are openly available from the authors online, I mentioned the issue of
 correlation to my colleague [Nicholas
 Lester](http://nicholaslester.weebly.com/).
 
-Nick generated a few plots and made comments that I think might be
-useful to the authors as well.
+Nick generated a few plots and made comments that may be useful to the
+authors.
 
-First, he generated a plot with GAM smooth:
+First, plot the correlation between the counts from the SI and PHOIBLE
+estimates.
 
-![Plot with GAM smooth](images/dotchart.png)
+    # Plotting correlation with GAM smooth and observed points
+    library(ggplot2)
+    p = ggplot(m, aes(x = si_phonemes, y = phoible_phonemes)) + 
+        geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+        geom_point() +
+        xlab("SI cts") + 
+        ylab("PHOIBLE cts") +
+        ylim(15, 45) +
+        xlim(15, 45) +
+        theme_bw()
+
+    p
+
+![](tests_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+    # Create a new measure delta_true (so we get a sign
+    # to indicate which dataset predicts larger/smaller
+    # inventory)
+    m$delta_true = m$phoible_phonemes-m$si_phonemes
+
+    # Pare down the data to just the languages that disagree
+    # between the two datasets in their estimates of
+    # inventory size (m.dc)
+    m.dc = m[m$delta>0,]
+
+    # Order the dataframe for prettier plotting
+    m.dc = m.dc[order(m.dc$delta_true),]
+
+    # Dotchart showing the differences between the inventory
+    # size estimates (positive = PHOIBLE is larger; negative
+    # = SI is larger)
+    dotchart(x = m.dc$delta_true, labels = m.dc$LanguageName, main="Difference in inventory size")
+    abline(v=0, col="red", lwd=2)
+    text(-3, 50, "SI", cex = 1.5, col = "blue")
+    text(11, 25, "PHOIBLE", cex = 1.5, col = "blue")
+
+![](tests_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
 
 Nick notes:
 
@@ -352,11 +399,81 @@ Nick notes:
 > (you have already identified the labialized consonants thing, but
 > perhaps other factors play a role).”
 
-Second, he generated a Cleveland’s dot plot to show which languages show
-the biggest differences (negative = SI bigger; positive = PHOIBLE
-bigger).
+Another question concerns how the number of word forms or segments
+represented in the corpus influence the degree of similarity between the
+inventory size estimates for SI and PHOIBLE.
 
-![Cleveland plot](images/phoible_vs_si.png)
+    # Merge the SI form and segment counts with the m table of counts
+    df$LanguageName = df$variety_name
+    m.wcounts = left_join(m, unique(df[, c("LanguageName", "n_forms", "n_phon_segs")]), by = "LanguageName")
+
+    m.wcounts = as.data.frame(m.wcounts)
+
+    # Difference in size estimates as a function of word forms
+    p2 = ggplot(m.wcounts, aes(x = n_forms, y = delta_true)) + 
+         geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+         geom_point() +
+         xlab("Number of lexemes") + 
+         ylab("Difference in inventory size") +
+         theme_bw()
+
+    p2
+
+![](tests_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+    ## Now use the cut-off of 450, as suggested by Bowern
+    p2a = ggplot(m.wcounts[m.wcounts$n_forms>=450,], aes(x = n_forms, y = delta_true)) + 
+         geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+         geom_point() +
+         xlab("Number of lexemes") + 
+         ylab("Difference in inventory size") +
+         theme_bw()
+
+    p2a
+
+![](tests_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
+
+    # Difference in size estimates as a function of segment count
+    p3 = ggplot(m.wcounts, aes(x = n_phon_segs, y = delta_true)) + 
+         geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+         geom_point() +
+         xlab("Number of lexemes") + 
+         ylab("Difference in inventory size") +
+         theme_bw()
+
+    p3
+
+![](tests_files/figure-gfm/unnamed-chunk-19-3.png)<!-- -->
+
+    # Take out the languages that do not differ from each other
+    m.wcounts.diff = m.wcounts[m.wcounts$delta_true!=0,]
+
+    # Difference in size estimates as a function of word forms
+    p4 = ggplot(m.wcounts.diff, aes(x = n_forms, y = delta_true)) + 
+         geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+         geom_point() +
+         xlab("Number of lexemes") + 
+         ylab("Difference in inventory size") +
+         theme_bw()
+
+    p4
+
+![](tests_files/figure-gfm/unnamed-chunk-19-4.png)<!-- -->
+
+    # Difference in size estimates as a function of segment count
+    p5 = ggplot(m.wcounts.diff, aes(x = n_phon_segs, y = delta_true)) + 
+         geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+         geom_point() +
+         xlab("Number of lexemes") + 
+         ylab("Difference in inventory size") +
+         theme_bw()
+
+    p5
+
+![](tests_files/figure-gfm/unnamed-chunk-19-5.png)<!-- -->
+
+The Cleveland’s dot plots show which languages show the biggest
+differences (negative = SI bigger; positive = PHOIBLE bigger).
 
 Nick also asked whether the size of the documented lexicon or the number
 of attested segments overall impacts the difference in inventory size.
@@ -371,16 +488,10 @@ However, he notes:
 > given the other paper you sent, convergence appears to gain strength
 > starting around 500 items.”
 
-As shown in this plot:
-
-![](images/inventory_vs_lexemes.png)
-
 This trend also holds if we remove the matching (0 difference)
-languages:
+languages, as shown above.
 
-![](images/inventory_vs_lexemes2.png)
-
-And he notes:
+Nick notes:
 
 > “One thing I *think* I see is that the variance for”SI = higher count"
 > languages (below the regression line) tends to shrink at a slower rate
@@ -397,3 +508,139 @@ the authors.
 
 Lastly, another question to ask, is whether consonants or vowels more or
 less likely to lead to discripencies between the counts?
+
+    # Get additional information on segments
+    m.cv = left_join(unique(df[, c("LanguageName", "match", "n_forms", "n_phon_segs", "lex_ID")]), unique(phoible[,c("Phoneme", "SegmentClass")]), by = c("match" = "Phoneme"))
+
+    # Remove consonants and vowels into separate dataframes
+    ## Consonants
+    m.c = m.cv %>% filter(SegmentClass == "consonant")
+
+    ## Vowels
+    m.v = m.cv %>% filter(SegmentClass == "vowel")
+
+    # Recompute counts separately
+    ## Consonants
+    counts.c = m.c %>% group_by(lex_ID, LanguageName) %>% summarize(si_phonemes_c = n())
+
+    ## `summarise()` regrouping output by 'lex_ID' (override with `.groups` argument)
+
+    ## Vowels
+    counts.v = m.v %>% group_by(lex_ID, LanguageName) %>% summarize(si_phonemes_v = n())
+
+    ## `summarise()` regrouping output by 'lex_ID' (override with `.groups` argument)
+
+    # Now, do the same for PHOIBLE
+    p.er = phoible %>% filter(Source=="er") %>% dplyr::select(InventoryID, Source, LanguageName, Phoneme, SegmentClass)
+
+    ## Consonants only
+    p.c = p.er %>% filter(SegmentClass == "consonant")
+
+    ## Vowels only
+    p.v = p.er %>% filter(SegmentClass =="vowel")
+
+    # Get the counts
+    ## Consonants
+    er.counts.c <- p.c %>% group_by(InventoryID, Source, LanguageName) %>% summarize(phoible_phonemes_c = n())
+
+    ## `summarise()` regrouping output by 'InventoryID', 'Source' (override with `.groups` argument)
+
+    ## Vowels
+    er.counts.v = p.v %>% group_by(InventoryID, Source, LanguageName) %>% summarize(phoible_phonemes_v = n())
+
+    ## `summarise()` regrouping output by 'InventoryID', 'Source' (override with `.groups` argument)
+
+    # Find the common languages between the data from SI and PHOIBLE
+    ## Consonants
+    anti_join(counts.c, er.counts.c, by='LanguageName')
+
+    ## # A tibble: 3 x 3
+    ## # Groups:   lex_ID [3]
+    ##   lex_ID LanguageName si_phonemes_c
+    ##    <dbl> <chr>                <int>
+    ## 1    288 Wangkatja               17
+    ## 2    618 Mirniny                 20
+    ## 3    968 Ogh Angkula             18
+
+    ## Vowels
+    anti_join(counts.v, er.counts.v, by='LanguageName')
+
+    ## # A tibble: 3 x 3
+    ## # Groups:   lex_ID [3]
+    ##   lex_ID LanguageName si_phonemes_v
+    ##    <dbl> <chr>                <int>
+    ## 1    288 Wangkatja                6
+    ## 2    618 Mirniny                  5
+    ## 3    968 Ogh Angkula              6
+
+    # Combine the data from SI and PHOIBLE
+    ## Consonants
+    consonants = inner_join(er.counts.c, counts.c, by='LanguageName')
+
+    ### Add difference measures
+    consonants$true_delta = consonants$phoible_phonemes_c - consonants$si_phonemes_c
+
+    consonants$delta <- abs(consonants$true_delta)
+
+    ## Vowels
+    vowels = inner_join(er.counts.v, counts.v, by='LanguageName')
+
+    ### Add difference measures
+    vowels$true_delta = vowels$phoible_phonemes_v - vowels$si_phonemes_v
+
+    vowels$delta <- abs(vowels$true_delta)
+
+    # Test correlations between counts
+    cor.test(consonants$si_phonemes_c, consonants$phoible_phonemes_c)
+
+    ## 
+    ##  Pearson's product-moment correlation
+    ## 
+    ## data:  consonants$si_phonemes_c and consonants$phoible_phonemes_c
+    ## t = 17.151, df = 163, p-value < 2.2e-16
+    ## alternative hypothesis: true correlation is not equal to 0
+    ## 95 percent confidence interval:
+    ##  0.7400690 0.8506806
+    ## sample estimates:
+    ##       cor 
+    ## 0.8021528
+
+    cor.test(vowels$si_phonemes_v, vowels$phoible_phonemes_v)
+
+    ## 
+    ##  Pearson's product-moment correlation
+    ## 
+    ## data:  vowels$si_phonemes_v and vowels$phoible_phonemes_v
+    ## t = 25.521, df = 163, p-value < 2.2e-16
+    ## alternative hypothesis: true correlation is not equal to 0
+    ## 95 percent confidence interval:
+    ##  0.8589083 0.9212378
+    ## sample estimates:
+    ##       cor 
+    ## 0.8943314
+
+    # Consonants are slightly worse than vowels
+
+    # Now create a long-form dataframe
+    c.long = consonants
+    colnames(c.long)[c(4, 6)] = c("phoible_phonemes", "si_phonemes")
+    c.long$segment_class = rep("consonant", nrow(c.long))
+
+    v.long = vowels
+    colnames(v.long)[c(4, 6)] = c("phoible_phonemes", "si_phonemes")
+    v.long$segment_class = rep("vowel", nrow(v.long))
+
+    long.dat = bind_rows(c.long, v.long)
+
+    long.mod.dat = long.dat[long.dat$delta>0,]
+
+    boxcox(lm(delta~1, data=long.mod.dat))
+
+![](tests_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+    long.mod.dat$tDelta = -1/long.mod.dat$delta
+
+    # ...and predict the deltas as function of segment class
+    model.cv = gam(tDelta ~ segment_class, data=long.mod.dat)
+
+    model.cv = gam(true_delta ~ segment_class, data=long.mod.dat)

@@ -1,6 +1,6 @@
-# Re-evaluating phoneme frequencies
+# Review of: "Re-evaluating phoneme frequencies"
 
-Reviewer: Steven Moran <steven.moran@uzh.ch>
+* Reviewer: Steven Moran <steven.moran@uzh.ch>
 
 * Manuscript title: Re-evaluating phoneme frequencies
 * Manuscript ID: 570895
@@ -16,6 +16,10 @@ A preprint of the paper is available on arXiv.org:
 and the paper's supplementary materials are available on Zenodo:
 
 * https://zenodo.org/record/3886212#.XyQzGxMzZGB
+
+An accompaniment to this review is available here (details below):
+
+* https://github.com/bambooforest/reviews/blob/master/Macklin-CordesRound2020/tests.md
 
 
 ## Overview
@@ -87,7 +91,7 @@ However, this claim is not backed up with any analysis in the paper. Instead, I 
 
 Therefore, I decided to test the claim myself in a detailed R markdown report available here:
 
-* URL
+* https://github.com/bambooforest/reviews/blob/master/Macklin-CordesRound2020/tests.md
 
 The correlation between the number of phonemes as reported in PHOIBLE for the languages that overlap the phoneme inventory counts is relatively robust, but there are clearly some outliers (differences of up to 19 phonemes for two languages) that may be playing a role in the authors' analyses. 
 
@@ -158,9 +162,3 @@ The supplementary materials that I was able to access contain two data files:
 - Aus_segment_frequencies_2020-05-21.tsv
 
 Perhaps it's worth noting for the reader why the raw lexical data, phoneme segmentation code, and orthography profiles, used to generate the phoneme frequency counts are not available to the reader in the SI materials or via Zenodo. It seems that some of the lexical data are accessible from the Chirila database, which is freely available after agreeing to the terms of agreement (http://chirila.yale.edu/download). So I can imagine putting it in the wild is not an option.
-
-
-
-
-
-

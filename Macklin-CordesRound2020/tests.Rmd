@@ -1,5 +1,5 @@
 ---
-title: "Correlation analysis to accompany Moran's review of Macklin-Cordes & Round 2020"
+title: "Correlation analysis accompaniment for review of Macklin-Cordes & Round 2020"
 author: "Steven Moran & Nicholas Lester"
 date: "(`r format(Sys.time(), '%d %B, %Y')`)"
 output:
@@ -12,11 +12,14 @@ library(readr)
 library(dplyr)
 library(testthat)
 library(knitr)
+library(ggplot2)
+library(MASS)
+library(gam)
 ```
 
 # Overview
 
-This report is part of my open review of submitted to [Frontiers Psychology](https://www.frontiersin.org/journals/psychology).
+This report is an accompaniment of a [review of Macklin-Cordes & Round](https://github.com/bambooforest/reviews/blob/master/Macklin-CordesRound2020/review.md), solicited by editors of [Frontiers Psychology](https://www.frontiersin.org/journals/psychology) to Steven Moran <steven.moran@uzh.ch>. Details about the submission:
 
 * Manuscript title: Re-evaluating phoneme frequencies
 * Manuscript ID: 570895
@@ -25,7 +28,7 @@ This report is part of my open review of submitted to [Frontiers Psychology](htt
 * Article type: Original Research
 * Submitted on: 09 Jun 2020
 
-A preprint of the paper is available on arXiv.org:
+A preprint of the paper was made avvailable by the authors on arXiv.org:
 
 * https://arxiv.org/abs/2006.05206
 
@@ -33,13 +36,15 @@ and the paper's supplementary materials are available on Zenodo:
 
 * https://zenodo.org/record/3886212#.XyQzGxMzZGB
 
-One claim made by the authors in their paper is that:
+The aim of this report is to investigate a claim made by the authors:
 
 > "our dataset of phoneme frequencies is very likely to contain the complete population of phonemes in each language" 
 
-in their language sample. However, the authors do not actually test this claim in their paper.
+However, the authors do not actually test this claim in their paper.
 
-As part of my review, I wanted to know if this claim is true or not. Hence, I evaluate it below using their openly available supplementary data and corresponding phoneme inventories reported in the [PHOIBLE](https://phoible.org/) database, as generously provided in 2019 by the second author (Erich Round).
+As part of my review (SM), I wanted to know if this claim is true or not. Hence, I evaluate it below using the openly available supplementary data and corresponding phoneme inventories reported in the [PHOIBLE](https://phoible.org/) database, as generously provided in 2019 by the second author (Erich Round).
+
+Discussions with [Nicholas Lester](http://nicholaslester.weebly.com/) led to some additional descriptive studies and plots, below.
 
 
 # Data prep
@@ -77,7 +82,7 @@ phoible <- read_csv(url('https://github.com/phoible/dev/blob/master/data/phoible
 Get the ER (Erich Round) source for [Australian phonemic inventories contributed to PHOIBLE 2.0](https://zenodo.org/record/3464333#.XyUvnBMzY3E) in PHOIBLE.
 
 ```{r}
-er <- phoible %>% filter(Source=="er") %>% select(InventoryID, Source, LanguageName, Phoneme) 
+er <- phoible %>% filter(Source == "er") %>% dplyr::select(InventoryID, Source, LanguageName, Phoneme) 
 ```
 
 Let's have a look.
@@ -103,7 +108,7 @@ nrow(er.counts)
 Which sources are in the SI and not in PHOIBLE (at least according to strict language name matching)?
 
 ```{r}
-anti_join(counts, er.counts, by=c('variety_name'='LanguageName'))
+anti_join(counts, er.counts, by = c('variety_name' = 'LanguageName'))
 ```
 
 Only three out of 165. Nice!
@@ -111,7 +116,7 @@ Only three out of 165. Nice!
 Let's get the delta between the ER phoneme inventories in PHOIBLE and what is reported in the SI.
 
 ```{r}
-m <- inner_join(er.counts, counts, by=c('LanguageName'='variety_name'))
+m <- inner_join(er.counts, counts, by = c('LanguageName' = 'variety_name'))
 m$delta <- abs(m$phoible_phonemes - m$si_phonemes)
 ```
 
@@ -204,19 +209,115 @@ Even without removing the outliers, the correlation looks pretty good.
 
 Since both the paper preprint and data from the supplementary materials are openly available from the authors online, I mentioned the issue of correlation to my colleague [Nicholas Lester](http://nicholaslester.weebly.com/).
 
-Nick generated a few plots and made comments that I think might be useful to the authors as well.
+Nick generated a few plots and made comments that may be useful to the authors.
 
-First, he generated a plot with GAM smooth:
+First, plot the correlation between the counts from the SI and PHOIBLE estimates.
 
-![Plot with GAM smooth](images/dotchart.png)
+```{r}
+# Plotting correlation with GAM smooth and observed points
+library(ggplot2)
+p = ggplot(m, aes(x = si_phonemes, y = phoible_phonemes)) + 
+    geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+    geom_point() +
+    xlab("SI cts") + 
+    ylab("PHOIBLE cts") +
+    ylim(15, 45) +
+    xlim(15, 45) +
+    theme_bw()
+
+p
+
+# Create a new measure delta_true (so we get a sign
+# to indicate which dataset predicts larger/smaller
+# inventory)
+m$delta_true = m$phoible_phonemes-m$si_phonemes
+
+# Pare down the data to just the languages that disagree
+# between the two datasets in their estimates of
+# inventory size (m.dc)
+m.dc = m[m$delta>0,]
+
+# Order the dataframe for prettier plotting
+m.dc = m.dc[order(m.dc$delta_true),]
+
+# Dotchart showing the differences between the inventory
+# size estimates (positive = PHOIBLE is larger; negative
+# = SI is larger)
+dotchart(x = m.dc$delta_true, labels = m.dc$LanguageName, main="Difference in inventory size")
+abline(v=0, col="red", lwd=2)
+text(-3, 50, "SI", cex = 1.5, col = "blue")
+text(11, 25, "PHOIBLE", cex = 1.5, col = "blue")
+```
 
 Nick notes:
 
 > "So you see, the most variability comes in the middle ranges, and perhaps SI is slightly more guilty of overestimation (points below the line), but not by much. And as your table shows, the differences tend to be rather small (outside of the two outliers you mention). But it would be interesting to see what factors influence these variations (you have already identified the labialized consonants thing, but perhaps other factors play a role)." 
 
-Second, he generated a Cleveland's dot plot to show which languages show the biggest differences (negative = SI bigger; positive = PHOIBLE bigger).
+Another question concerns how the number of word forms or segments represented in the corpus influence the degree of similarity between the inventory size estimates for SI and PHOIBLE.
 
-![Cleveland plot](images/phoible_vs_si.png)
+```{r}
+# Merge the SI form and segment counts with the m table of counts
+df$LanguageName = df$variety_name
+m.wcounts = left_join(m, unique(df[, c("LanguageName", "n_forms", "n_phon_segs")]), by = "LanguageName")
+
+m.wcounts = as.data.frame(m.wcounts)
+
+# Difference in size estimates as a function of word forms
+p2 = ggplot(m.wcounts, aes(x = n_forms, y = delta_true)) + 
+     geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+     geom_point() +
+     xlab("Number of lexemes") + 
+     ylab("Difference in inventory size") +
+     theme_bw()
+
+p2
+
+## Now use the cut-off of 450, as suggested by Bowern
+p2a = ggplot(m.wcounts[m.wcounts$n_forms>=450,], aes(x = n_forms, y = delta_true)) + 
+     geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+     geom_point() +
+     xlab("Number of lexemes") + 
+     ylab("Difference in inventory size") +
+     theme_bw()
+
+p2a
+
+
+# Difference in size estimates as a function of segment count
+p3 = ggplot(m.wcounts, aes(x = n_phon_segs, y = delta_true)) + 
+     geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+     geom_point() +
+     xlab("Number of lexemes") + 
+     ylab("Difference in inventory size") +
+     theme_bw()
+
+p3
+
+# Take out the languages that do not differ from each other
+m.wcounts.diff = m.wcounts[m.wcounts$delta_true!=0,]
+
+# Difference in size estimates as a function of word forms
+p4 = ggplot(m.wcounts.diff, aes(x = n_forms, y = delta_true)) + 
+     geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+     geom_point() +
+     xlab("Number of lexemes") + 
+     ylab("Difference in inventory size") +
+     theme_bw()
+
+p4
+
+# Difference in size estimates as a function of segment count
+p5 = ggplot(m.wcounts.diff, aes(x = n_phon_segs, y = delta_true)) + 
+     geom_smooth(method="gam", formula = y ~ s(x, bs="tp")) +
+     geom_point() +
+     xlab("Number of lexemes") + 
+     ylab("Difference in inventory size") +
+     theme_bw()
+
+p5
+```
+
+The Cleveland's dot plots show which languages show the biggest differences (negative = SI bigger; positive = PHOIBLE bigger).
 
 Nick also asked whether the size of the documented lexicon or the number of attested segments overall impacts the difference in inventory size. It does not appear to be so.
 
@@ -224,15 +325,9 @@ However, he notes:
 
 > "What it DOES predict is the amount of variance in the sample. Lower numbers of segments or lexemes in the SI data show much greater variability in the difference between PHOIBLE and SI. This means that smaller samples are less reliable (as we should expect). As expected given the other paper you sent, convergence appears to gain strength starting around 500 items."
 
-As shown in this plot:
+This trend also holds if we remove the matching (0 difference) languages, as shown above.
 
-![](images/inventory_vs_lexemes.png)
-
-This trend also holds if we remove the matching (0 difference) languages:
-
-![](images/inventory_vs_lexemes2.png)
-
-And he notes:
+Nick notes:
 
 > "One thing I *think* I see is that the variance for "SI = higher count" languages (below the regression line) tends to shrink at a slower rate than that for "PHOIBLE = higher count" languages." There are clearly many possible reasons for this, but it says something like: "increasing the number of types in the sample for this study tends to produce larger inventory size estimates for SI than have been observed elsewhere in PHOIBLE, and the two databases are at greatest odds with one another when the SI sample lexicon was smaller."
 
@@ -240,3 +335,89 @@ One could dig through the other discrepencies in the table above and identify wh
 
 Lastly, another question to ask, is whether consonants or vowels more or less likely to lead to discripencies between the counts?
 
+```{r}
+# Get additional information on segments
+m.cv = left_join(unique(df[, c("LanguageName", "match", "n_forms", "n_phon_segs", "lex_ID")]), unique(phoible[,c("Phoneme", "SegmentClass")]), by = c("match" = "Phoneme"))
+
+# Remove consonants and vowels into separate dataframes
+## Consonants
+m.c = m.cv %>% filter(SegmentClass == "consonant")
+
+## Vowels
+m.v = m.cv %>% filter(SegmentClass == "vowel")
+
+# Recompute counts separately
+## Consonants
+counts.c = m.c %>% group_by(lex_ID, LanguageName) %>% summarize(si_phonemes_c = n())
+
+## Vowels
+counts.v = m.v %>% group_by(lex_ID, LanguageName) %>% summarize(si_phonemes_v = n())
+
+# Now, do the same for PHOIBLE
+p.er = phoible %>% filter(Source=="er") %>% dplyr::select(InventoryID, Source, LanguageName, Phoneme, SegmentClass)
+
+## Consonants only
+p.c = p.er %>% filter(SegmentClass == "consonant")
+
+## Vowels only
+p.v = p.er %>% filter(SegmentClass =="vowel")
+
+# Get the counts
+## Consonants
+er.counts.c <- p.c %>% group_by(InventoryID, Source, LanguageName) %>% summarize(phoible_phonemes_c = n())
+
+## Vowels
+er.counts.v = p.v %>% group_by(InventoryID, Source, LanguageName) %>% summarize(phoible_phonemes_v = n())
+
+# Find the common languages between the data from SI and PHOIBLE
+## Consonants
+anti_join(counts.c, er.counts.c, by='LanguageName')
+
+## Vowels
+anti_join(counts.v, er.counts.v, by='LanguageName')
+
+# Combine the data from SI and PHOIBLE
+## Consonants
+consonants = inner_join(er.counts.c, counts.c, by='LanguageName')
+
+### Add difference measures
+consonants$true_delta = consonants$phoible_phonemes_c - consonants$si_phonemes_c
+
+consonants$delta <- abs(consonants$true_delta)
+
+## Vowels
+vowels = inner_join(er.counts.v, counts.v, by='LanguageName')
+
+### Add difference measures
+vowels$true_delta = vowels$phoible_phonemes_v - vowels$si_phonemes_v
+
+vowels$delta <- abs(vowels$true_delta)
+
+# Test correlations between counts
+cor.test(consonants$si_phonemes_c, consonants$phoible_phonemes_c)
+cor.test(vowels$si_phonemes_v, vowels$phoible_phonemes_v)
+
+# Consonants are slightly worse than vowels
+
+# Now create a long-form dataframe
+c.long = consonants
+colnames(c.long)[c(4, 6)] = c("phoible_phonemes", "si_phonemes")
+c.long$segment_class = rep("consonant", nrow(c.long))
+
+v.long = vowels
+colnames(v.long)[c(4, 6)] = c("phoible_phonemes", "si_phonemes")
+v.long$segment_class = rep("vowel", nrow(v.long))
+
+long.dat = bind_rows(c.long, v.long)
+
+long.mod.dat = long.dat[long.dat$delta>0,]
+
+boxcox(lm(delta~1, data=long.mod.dat))
+
+long.mod.dat$tDelta = -1/long.mod.dat$delta
+
+# ...and predict the deltas as function of segment class
+model.cv = gam(tDelta ~ segment_class, data=long.mod.dat)
+
+model.cv = gam(true_delta ~ segment_class, data=long.mod.dat)
+```
