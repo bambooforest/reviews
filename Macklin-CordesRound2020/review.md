@@ -1,6 +1,6 @@
 # Review of: "Re-evaluating phoneme frequencies"
 
-* Reviewer: Steven Moran <steven.moran@uzh.ch>
+* Reviewer: Steven Moran \<steven.moran@uzh.ch\> (August 2, 2020)
 
 * Manuscript title: Re-evaluating phoneme frequencies
 * Manuscript ID: 570895
