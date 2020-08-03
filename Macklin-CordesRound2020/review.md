@@ -24,21 +24,21 @@ An accompaniment to this review is available here (details below):
 
 ## Overview
 
-This paper presents an interesting, and as the authors point out, timely analysis of the frequency distribution of phonemes with the goal of identifying whether or not these distributions follow one, or several, statistical distributions.
+This paper presents an interesting, and as the authors point out, timely analysis of the frequency distribution of phonemes with the goal of identifying whether or not these distributions follow one, or more, statistical distributions.
 
-The authors argue that identifying the statistical distributions of certain typological linguistic features will help shed light on the potential causal processes underlying identified distributions. Identifying causal processes underlying linguistic diversity, it is argued, is an important step in the development of linguistic theory.
+The authors argue that identifying the statistical distributions of certain typological linguistic features will help shed light on the potential causal processes underlying these distributions. Identifying causal processes underlying linguistic diversity, it is argued, is an important step in the development of linguistic theory.
 
-The authors take as a case study the phoneme inventories of a large sample of indigenous Australian languages, with the phoneme counts taken from wordlists of 250 or more word types. They then test whether the phoneme frequency distributions in these wordlists are fit any of several different statistical distributions.
+The authors take as a case study the phoneme inventories of a large sample of indigenous Australian languages, with the phoneme counts taken from wordlists of 250 or more word types. They then test whether the phoneme frequency distributions in these wordlists fit any of several different statistical distributions.
 
-Whereas the authors point out that such evaluations have historically been done plotting the frequency of the variable under investigation and by eye-balling whether or not if it looks for example Zipfian, or power law like, instead they use more recent state-of-the-art approaches to evaluate phoneme distributions, i.e. in a maximum likelihood framework described in Clauset et al., 2009.
+Whereas the authors point out that such evaluations have historically been done by plotting the frequency of the variable under investigation and by eye-balling whether or not if it looks, for example, Zipfian, or power law like, instead they use more recent state-of-the-art approaches to evaluate phoneme frequencies in terms of statistical distributions, i.e. in a maximum likelihood framework described in Clauset et al., 2009.
 
 I appreciate the authors' honesty regarding the application of the methods to the limited size of their data:
 
 > "This is simply not possible for most of the world’s languages (including all languages in this study) due to the limited size of segment inventories. Thus, in phonemic studies such as ours there is likely to be an unavoidable uncertainty in the estimate of [alpha]."
 
-The authors first fit a power law to the full distribution of phoneme frequencies in each language, and given the caveat above, they find it is generally a poor fit for the languages in their sample. As they note, previous literature has shown that one-parameter power-law poorly characterizes phoneme frequencies.
+The authors first fit a power law distribution to the phoneme frequencies in each language, and given the caveat above, they find it is generally a poor fit for the languages in their sample. As they note, previous literature has shown that one-parameter power-law poorly characterizes phoneme frequencies.
 
-Next they fit a power law with the xmin parameter to try to improve the fit of the power law distribution (it removes some of the least frequent observations from the sample). With the xmin parameter, the power law fit is plausible. Nevertheless, the authors suggest that although they cannot rule out the power law distribution, that it fits better with one parameter, so they investigate several other potential distributions, including log-normal, exponential, and poisson. For log-normal, they cannot confidently rule it out because it fits for around half the languages. For exponential, it seems to be a good fit; however a few languages show a very poor fit. For poisson, the authors find it is totally implausible.
+Next they fit a power law with the xmin parameter to try to improve the fit of the power law distribution (it removes some of the least frequent observations from the sample). With the xmin parameter, the power law fit is plausible. Nevertheless, the authors suggest that although they cannot rule out the power law distribution, and that it fits better with one parameter, so they investigate several other potential distributions, including log-normal, exponential, and poisson. For log-normal, they cannot confidently rule it out because it fits for around half the languages. For exponential, it seems to be a good fit; however a few languages show a very poor fit. For poisson, the authors find it totally implausible.
 
 The authors then conduct an evaluation for best fit among the multiple plausible distributions by using likelihood ratio tests for model selection. They find that basic power law with a single free parameter is generally insufficient for capturing the frequency distribution of phonemes in languages in their sample. In line with previous work, they find an exponential (geometric) distribution with a single parameter is a plausible fit for (full) phoneme inventories in their sample. They also find that log-normal (with two free parameters) is also a plausible fit. Poisson is not.
 
@@ -75,11 +75,13 @@ Perhaps also relevant to the authors, Everett (2018, pg. 128) notes:
 
 > "Some consonants are particularly ubiquitous in the word lists, even after controlling for relatedness. There is a power-law association between consonant ranking and frequency, similar though not identical to the Zipfian association well-known to surface in other facets of speech like word usage (Zipf, 1949; Piantadosi, 2015) (The association is technically closer to a Yule-ian association–see Tambovtsev and Martindale (2007))."
 
-I mention here that a potential shortcoming of Everett's analysis, as I understand it, is that he used the relatively small wordlists from the ASJP database. The fact that the authors here used relatively large wordlists (250 or more words) is meant to address any issues regarding estimating the actual frequencies of phonemes in the language.
+I mention here that a potential shortcoming of Everett's analysis, as I understand it, is that he used the relatively small wordlists from the ASJP database (https://asjp.clld.org/). The fact that the authors here used relatively large wordlists (250 or more words) is meant to address any issues regarding estimating the actual frequencies of phonemes in the language.
 
-Personally, I discuss earlier why the authors chose a minimum wordlist size of 250, because as I read the paper, I started wondering early on in the Data section why any wordlist data was acceptable for this analysis, given the argumentation by Dockum & Bowern (2019), which is only mentioned at the end.
+Personally, in the paper I would discuss earlier why the authors chose a minimum wordlist size of 250, because as I read the paper, I started wondering early on in the Data section why any wordlist data was acceptable for this analysis, given the argumentation by Dockum & Bowern (2019), which is only mentioned at the end.
 
-Another argument the authors could leverage here for using "Australia as an ideal controlled experiment" is that of the size of the wordlists that you are using are not readably available (AFAIK) for a large sample of the world's languages (and also not in a consistent typologized and orthographically/phonetically normalized format). Hence, given the impact of wordlist size on phonological generalizations, one arguably should not use a data set like the ASJP (https://asjp.clld.org/) -- even though as noted above, Everett reports some interesting results.
+* Dockum, Rikker & Claire Bowern. 2018. Swadesh lists are not long enough: Drawing phonological generalizations from limited data. In Peter K. Austin (ed.) Language Documentation and Description, vol 16. London: EL Publishing. pp. 35-54. Online: http://www.elpublishing.org/PID/168.
+
+Another argument that the authors could leverage here for using "Australia as an ideal controlled experiment" is that wordlists of a large enough size are not readably available (AFAIK) for a large sample of the world's languages (and if so, they are unlikely to be consistently typologized and orthographically/phonetically normalized). Hence given the impact of wordlist size on phonological generalizations, one arguably should not use a data set like the ASJP for phonological generalizations -- even though as noted above, Everett (2018) reports some interesting results.
 
 One issue I had with the paper was the claim by the authors that:
 
@@ -93,16 +95,16 @@ Therefore, I decided to test the claim myself in a detailed R markdown report av
 
 * https://github.com/bambooforest/reviews/blob/master/Macklin-CordesRound2020/tests.md
 
-The correlation between the number of phonemes as reported in PHOIBLE for the languages that overlap the phoneme inventory counts is relatively robust, but there are clearly some outliers (differences of up to 19 phonemes for two languages) that may be playing a role in the authors' analyses. 
+The correlation between the number of phonemes as reported in PHOIBLE for the languages that overlap with the phoneme inventory counts as reported in the paper is relatively robust. However, there are clearly some outliers (differences of up to 19 phonemes for two languages) that may be playing a role in the authors' analyses. 
 
-Furthermore, given that the data and the paper are available openly online, I mentioned the issue of correlation to my colleague Nicholas Lester, who generated a few plots and added some comments that I think the authors may find quite useful. In sum, we highlight what factors influence the variability found in the authors data. For example, lower numbers of segments or lexemes in the authors' data shows greater variability in the difference between PHOIBLE inventories and their data, i.e. smaller sample are less reliable and convergence appears to gain strength around 500 items.
+Furthermore, given that the data and the paper are available openly online, I mentioned the issue of correlation to my colleague Nicholas Lester (http://nicholaslester.weebly.com/), who generated a few plots and added some comments that I think the authors may find quite useful. In sum, we highlight what factors influence the variability found in the authors data. For example, lower numbers of segments or lexemes in the authors' data shows greater variability in the difference between PHOIBLE inventories and their data, i.e. smaller samples are less reliable and convergence appears to gain strength around 500 items.
 
-Another question we ask, in regard to comments I made above, is whether consonants or vowels more or less likely to lead to discrepancies between the counts? 
+Another question we ask, in regard to comments I made above, is whether consonants or vowels are more or less likely to lead to discrepancies between the counts.
 
 
 ## Minor comments
 
-Nice job on the Shiny app! I do hope you get it hosted online for non-R users.
+Nice job on the Shiny app! I do hope you get it hosted online, so that readers can access it without having to load it in R.
 
 Regarding the data, what is the genealogical coverage of these language varieties? Is the sample genealogically balanced within the language families of Australia that it represents? How many are languages and how many are dialects?
 
@@ -112,14 +114,16 @@ I find the following example difficult:
 
 My recollection of the urn model is that when a ball is selected from the urn, it is replaced to the urn with an additional ball of the same color. Hence, the rich get richer process, because one is skewing the probability by adding more balls of the same color. Something about the above description is lacking, if that's what the author are describing.
 
-The introduction talks about the promise of evaluating and identifying distributions in linguistic phenomena, and below you list a bunch of diverse array of phenomena, but you fail to mention what their causal processes are (if it is known).
+The introduction talks about the promise of evaluating and identifying distributions in linguistic phenomena, and below you list a diverse array of phenomena, but you fail to mention what their causal processes are (if it is known).
 
 > "Since Yule’s first demonstration of the link between power law distributions and preferential attachment processes, power laws have been used to characterize the distributions of a diverse array of phenomena in the natural and physical world and in human society (Clauset et al., 2009, 661). City populations (Gabaix, 1999; Levy, 2009; Malevergne et al., 2011), authorship of scientific publications, income distribution (Simon, 1955), the superstar phenomenon in the music industry (Chung and Cox, 1994) and the network topology of the Internet (Faloutsos et al., 1999) are but a few of the phenomena for which power laws have been proposed (see Newman (2005), pp. 327–329 for further examples). And in linguistics, the Zipfian distribution has been used to characterize word frequencies in text corpora (Estoup, 1916; Zipf, 1932,
 80 1949)."
 
-It might be worth mentioning the lack of historical agreement on probability distributions of typological variables and that of phoneme inventory sizes (and if not, perhaps it is of interest to the authors). As I wrote in my PhD dissertation (Moran 2012, pg 240):
+It might be worth mentioning the lack of historical agreement on probability distributions of typological variables in general, and that of phoneme inventory sizes in particular. As I wrote in my PhD dissertation (Moran 2012, pg 240):
 
 > "However, there is no agreement on how to measure the underlying probability distribution of typological variables (Cysouw, 2010). For instance, to describe phoneme inventory size, gamma (Lehfeldt, 1975) and log-normal distributions (Justeson and Stephens, 1984) have been proposed. Maddieson (2008a) also hints at a normal distribution (Cysouw, 2010, 30)."
+
+If not, perhaps it is of interest to the authors anyway.
 
 
 ## Typos and suggestions
@@ -154,11 +158,13 @@ Regarding the supplementary materials:
 
 - "S5 is downloadable from https://zenodo.org/record/3886212#.Xt9NFWozaO8."
 
-But clicking on the link in the PDF gives the reader a 404 error.
+But clicking on the link in the PDF gives the reader a 404 error (the URL works here).
 
 The supplementary materials that I was able to access contain two data files:
 
 - Aus_metadata_2020-05-21.tsv
 - Aus_segment_frequencies_2020-05-21.tsv
 
-Perhaps it's worth noting for the reader why the raw lexical data, phoneme segmentation code, and orthography profiles, used to generate the phoneme frequency counts are not available to the reader in the SI materials or via Zenodo. It seems that some of the lexical data are accessible from the Chirila database, which is freely available after agreeing to the terms of agreement (http://chirila.yale.edu/download). So I assume posting the data openly on the internet is, understandably, not an option.
+First, I think it would be more useful if the authors had a metadata column that specified the Glottolog codes (particularly since ISO 639-3 lacks codes for many Australian languages) than simply the language names. This should not be difficult since most of the languages in the sample are already tagged with a Glottocode in the PHOIBLE database (see accompaniment to this review, which contains the code to do the mapping).
+
+Second, perhaps it's worth noting for the reader why the raw lexical data, phoneme segmentation code, and orthography profiles, used to generate the phoneme frequency counts are not available to the reader in the SI materials or via Zenodo. It seems that some of the lexical data are accessible from the Chirila database, which is freely available after signing the terms of agreement (http://chirila.yale.edu/download). So I assume posting the data openly on the internet is, understandably, not an option. If so, that would be good to know.

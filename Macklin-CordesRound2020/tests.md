@@ -2,7 +2,7 @@ Correlation analysis accompaniment for review of Macklin-Cordes & Round
 2020
 ================
 Steven Moran & Nicholas Lester
-(02 August, 2020)
+(03 August, 2020)
 
     library(readr)
     library(dplyr)
@@ -20,7 +20,7 @@ Round](https://github.com/bambooforest/reviews/blob/master/Macklin-CordesRound20
 solicited by editors of [Frontiers
 Psychology](https://www.frontiersin.org/journals/psychology) to Steven
 Moran
-<a href="mailto:steven.moran@uzh.ch" class="email">steven.moran@uzh.ch</a>.
+&lt;<a href="mailto:steven.moran@uzh.ch" class="email">steven.moran@uzh.ch</a>&gt;.
 Details about the submission:
 
 -   Manuscript title: Re-evaluating phoneme frequencies
@@ -30,7 +30,7 @@ Details about the submission:
 -   Article type: Original Research
 -   Submitted on: 09 Jun 2020
 
-A preprint of the paper was made avvailable by the authors on arXiv.org:
+A preprint of the paper was made available by the authors on arXiv.org:
 
 -   <a href="https://arxiv.org/abs/2006.05206" class="uri">https://arxiv.org/abs/2006.05206</a>
 
@@ -49,7 +49,8 @@ As part of my review (SM), I wanted to know if this claim is true or
 not. Hence, I evaluate it below using the openly available supplementary
 data and corresponding phoneme inventories reported in the
 [PHOIBLE](https://phoible.org/) database, as generously provided in 2019
-by the second author (Erich Round).
+by the second author ([Erich
+Round](https://researchers.uq.edu.au/researcher/1761)).
 
 Discussions with [Nicholas Lester](http://nicholaslester.weebly.com/)
 led to some additional descriptive studies and plots, below.
@@ -181,7 +182,7 @@ outliers.
 | 6    |    1 |
 | 19   |    2 |
 
-Which languages have a diference of 19 phoneme between sources?
+Which languages have a difference of 19 phoneme between sources?
 
     m %>% filter(delta==19)
 
@@ -268,7 +269,7 @@ ER source in PHOIBLE:
     <a href="http://sealang.net/archives/pl/pdf/PL-512.45.pdf" class="uri">http://sealang.net/archives/pl/pdf/PL-512.45.pdf</a>
 
 Browsing quickly through the chapter, we find there is some controversy
-about the rounding of consonats (Breen, 2001, pg. 49):
+about the rounding of consonants (Breen, 2001, pg. 49):
 
 > “Since this type of analysis, involving rounding of consonants, has
 > been accepted, consonant inventories have often been described as
@@ -300,6 +301,9 @@ article and Breen & Dobson (2005, pg. 249) note:
 > associated with a consonant position (C or CC) in a word rather than
 > as a phonological feature of the particular consonant(s). Nevertheless
 > rounded forms as well as unrounded are exemplified.”
+
+One could dig through the other discrepancies in the table above and
+identify where the differences are. We leave this up to the authors.
 
 Do the two sources correlate?
 =============================
@@ -502,12 +506,8 @@ Nick notes:
 > elsewhere in PHOIBLE, and the two databases are at greatest odds with
 > one another when the SI sample lexicon was smaller.”
 
-One could dig through the other discrepencies in the table above and
-identify where the controversies, or mistakes, are. We leave this up to
-the authors.
-
 Lastly, another question to ask, is whether consonants or vowels more or
-less likely to lead to discripencies between the counts?
+less likely to lead to discrepancies between the counts?
 
     # Get additional information on segments
     m.cv = left_join(unique(df[, c("LanguageName", "match", "n_forms", "n_phon_segs", "lex_ID")]), unique(phoible[,c("Phoneme", "SegmentClass")]), by = c("match" = "Phoneme"))
@@ -619,7 +619,7 @@ less likely to lead to discripencies between the counts?
     ##       cor 
     ## 0.8943314
 
-    # Consonants are slightly worse than vowels
+Consonants are slightly worse than vowels.
 
     # Now create a long-form dataframe
     c.long = consonants
@@ -636,7 +636,7 @@ less likely to lead to discripencies between the counts?
 
     boxcox(lm(delta~1, data=long.mod.dat))
 
-![](tests_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](tests_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
     long.mod.dat$tDelta = -1/long.mod.dat$delta
 

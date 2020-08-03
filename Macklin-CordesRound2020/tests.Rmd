@@ -19,7 +19,7 @@ library(gam)
 
 # Overview
 
-This report is an accompaniment of a [review of Macklin-Cordes & Round](https://github.com/bambooforest/reviews/blob/master/Macklin-CordesRound2020/review.md), solicited by editors of [Frontiers Psychology](https://www.frontiersin.org/journals/psychology) to Steven Moran <steven.moran@uzh.ch>. Details about the submission:
+This report is an accompaniment of a [review of Macklin-Cordes & Round](https://github.com/bambooforest/reviews/blob/master/Macklin-CordesRound2020/review.md), solicited by editors of [Frontiers Psychology](https://www.frontiersin.org/journals/psychology) to Steven Moran \<steven.moran@uzh.ch\>. Details about the submission:
 
 * Manuscript title: Re-evaluating phoneme frequencies
 * Manuscript ID: 570895
@@ -28,7 +28,7 @@ This report is an accompaniment of a [review of Macklin-Cordes & Round](https://
 * Article type: Original Research
 * Submitted on: 09 Jun 2020
 
-A preprint of the paper was made avvailable by the authors on arXiv.org:
+A preprint of the paper was made available by the authors on arXiv.org:
 
 * https://arxiv.org/abs/2006.05206
 
@@ -42,7 +42,7 @@ The aim of this report is to investigate a claim made by the authors:
 
 However, the authors do not actually test this claim in their paper.
 
-As part of my review (SM), I wanted to know if this claim is true or not. Hence, I evaluate it below using the openly available supplementary data and corresponding phoneme inventories reported in the [PHOIBLE](https://phoible.org/) database, as generously provided in 2019 by the second author (Erich Round).
+As part of my review (SM), I wanted to know if this claim is true or not. Hence, I evaluate it below using the openly available supplementary data and corresponding phoneme inventories reported in the [PHOIBLE](https://phoible.org/) database, as generously provided in 2019 by the second author ([Erich Round](https://researchers.uq.edu.au/researcher/1761)).
 
 Discussions with [Nicholas Lester](http://nicholaslester.weebly.com/) led to some additional descriptive studies and plots, below.
 
@@ -126,7 +126,7 @@ For the most languages, the difference is quite small, but there are two outlier
 table(m$delta) %>% kable()
 ```
 
-Which languages have a diference of 19 phoneme between sources?
+Which languages have a difference of 19 phoneme between sources?
 
 ```{r}
 m %>% filter(delta==19)
@@ -173,7 +173,7 @@ Let's have a look at the original source description, i.e. the doculect from whi
 
 * Breen, Gavan. 2001. The wonders of Arandic phonology. In Simpson, Jane and Nash, David and Laughren, Mary and Austin, Peter and Alpher, Barry (eds.), Forty Years on: Ken Hale and Australian languages, 45–70. Pacific Linguistics. Online: http://sealang.net/archives/pl/pdf/PL-512.45.pdf
 
-Browsing quickly through the chapter, we find there is some controversy about the rounding of consonats (Breen, 2001, pg. 49):
+Browsing quickly through the chapter, we find there is some controversy about the rounding of consonants (Breen, 2001, pg. 49):
 
 > "Since this type of analysis, involving rounding of consonants, has been accepted, consonant inventories have often been described as including a certain number (for example, 26 for CAr) of unrounded consonants plus a rounded consonant corresponding to each unrounded member of the inventory. There are doubts about this, however; roundness seems not to be associated with consonants as such, but with consonant positions in a word-which might be occupied by one or two consonants."
 
@@ -188,6 +188,8 @@ See:
 Labialized consonants are not listed in the consonant chart in this article and Breen & Dobson (2005, pg. 249) note:
 
 > "All of these consonants except /w/ and /ɰ/ have rounded as well as unrounded forms, but these are now regarded as having rounding associated with a consonant position (C or CC) in a word rather than as a phonological feature of the particular consonant(s). Nevertheless rounded forms as well as unrounded are exemplified."
+
+One could dig through the other discrepancies in the table above and identify where the differences are. We leave this up to the authors.
 
 
 # Do the two sources correlate?
@@ -331,9 +333,7 @@ Nick notes:
 
 > "One thing I *think* I see is that the variance for "SI = higher count" languages (below the regression line) tends to shrink at a slower rate than that for "PHOIBLE = higher count" languages." There are clearly many possible reasons for this, but it says something like: "increasing the number of types in the sample for this study tends to produce larger inventory size estimates for SI than have been observed elsewhere in PHOIBLE, and the two databases are at greatest odds with one another when the SI sample lexicon was smaller."
 
-One could dig through the other discrepencies in the table above and identify where the controversies, or mistakes, are. We leave this up to the authors.
-
-Lastly, another question to ask, is whether consonants or vowels more or less likely to lead to discripencies between the counts?
+Lastly, another question to ask, is whether consonants or vowels more or less likely to lead to discrepancies between the counts?
 
 ```{r}
 # Get additional information on segments
@@ -396,9 +396,11 @@ vowels$delta <- abs(vowels$true_delta)
 # Test correlations between counts
 cor.test(consonants$si_phonemes_c, consonants$phoible_phonemes_c)
 cor.test(vowels$si_phonemes_v, vowels$phoible_phonemes_v)
+```
 
-# Consonants are slightly worse than vowels
+Consonants are slightly worse than vowels.
 
+```{r}
 # Now create a long-form dataframe
 c.long = consonants
 colnames(c.long)[c(4, 6)] = c("phoible_phonemes", "si_phonemes")
